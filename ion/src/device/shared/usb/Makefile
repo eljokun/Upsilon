@@ -46,29 +46,44 @@ ion_device_dfu_src += ion/src/device/$(MODEL)/drivers/cache.cpp
 ion_device_dfu_src += ion/src/device/$(MODEL)/drivers/external_flash.cpp
 ion_device_dfu_src += ion/src/device/$(MODEL)/drivers/reset.cpp
 ion_device_dfu_src += ion/src/device/$(MODEL)/drivers/usb.cpp
+
+ifeq ($(MODEL),n0120)
+ion_device_dfu_src += ion/src/device/n0120/drivers/keyboard.cpp
+endif
 ion_device_dfu_src += $(addprefix ion/src/device/shared/drivers/, \
   backlight.cpp \
   battery.cpp \
   base64.cpp \
-  board.cpp \
   console_uart.cpp \
   crc32.cpp \
   display.cpp \
   events_keyboard_platform.cpp \
   flash.cpp \
   internal_flash.cpp \
-  keyboard.cpp \
   led.cpp \
   power.cpp\
   random.cpp\
-  reset.cpp \
   serial_number.cpp \
   swd.cpp \
   timing.cpp \
   usb.cpp \
   usb_desc.cpp \
+)
+
+ifneq ($(MODEL),n0120)
+ion_device_dfu_src += $(addprefix ion/src/device/shared/drivers/, \
+  keyboard.cpp \
   wakeup.cpp \
 )
+endif
+
+ifneq ($(MODEL),n0120)
+ion_device_dfu_src += ion/src/device/shared/drivers/board.cpp
+endif
+
+ifneq ($(MODEL),n0120)
+ion_device_dfu_src += ion/src/device/shared/drivers/reset.cpp
+endif
 
 # Sources required to execute DFU in place
 ion_device_src += ion/src/device/shared/usb/dfu_xip.cpp:+usbxip
